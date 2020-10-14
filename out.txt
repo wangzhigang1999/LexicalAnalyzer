@@ -1,27 +1,98 @@
-<5,#>
-<2,include>
-<4,<>
-<2,stdio>
-<2,h>
-<4,>>
-<1,int>
-<2,main>
-<5,(>
-<5,)>
-<5,{>
-<1,int>
-<2,a>
-<4,=>
-<3,1>
-<3,2>
-<5,;>
-<1,printf>
-<5,(>
-<2,hello>
-<2,world>
-<5,)>
-<5,;>
-<1,return>
-<3,0>
-<5,;>
-<5,}>
+<boundary ,#>
+<string   ,include>
+<operators ,<>
+<string   ,stdlib.h>
+<operators ,>>
+<boundary ,#>
+<string   ,include>
+<operators ,<>
+<string   ,cstdio>
+<operators ,>>
+<keyword  ,int>
+<string   ,fun>
+<boundary ,(>
+<boundary ,)>
+<boundary ,{>
+<string   ,printf>
+<boundary ,(>
+<boundary ,">
+<keyword  ,Hello world!>
+<boundary ,">
+<boundary ,)>
+<boundary ,;>
+<keyword  ,int>
+<string   ,a>
+<operators ,=>
+<constant ,10>
+<boundary ,;>
+<string   ,a>
+<operators ,+=>
+<constant ,10>
+<boundary ,;>
+<keyword  ,if>
+<boundary ,(>
+<string   ,a>
+<operators ,==>
+<constant ,10>
+<boundary ,)>
+<boundary ,{>
+<string   ,printf>
+<boundary ,(>
+<boundary ,">
+<keyword  ,Hello world!>
+<boundary ,">
+<boundary ,)>
+<boundary ,;>
+<boundary ,}>
+<keyword  ,return>
+<constant ,0>
+<boundary ,;>
+<boundary ,}>
+<keyword  ,struct>
+<string   ,entry>
+<boundary ,{>
+<keyword  ,void>
+<operators ,*>
+<string   ,key>
+<boundary ,;>
+<keyword  ,union>
+<boundary ,{>
+<keyword  ,void>
+<operators ,*>
+<string   ,value>
+<boundary ,;>
+<boundary ,}>
+<boundary ,;>
+<string   ,entry>
+<operators ,*>
+<string   ,next>
+<boundary ,;>
+<boundary ,}>
+<boundary ,;>
+<keyword  ,struct>
+<string   ,dict>
+<boundary ,{>
+<string   ,entry>
+<operators ,*>
+<operators ,*>
+<string   ,table>
+<boundary ,;>
+<keyword  ,unsigned>
+<keyword  ,long>
+<string   ,size>
+<boundary ,;>
+<keyword  ,unsigned>
+<keyword  ,long>
+<string   ,sizemask>
+<boundary ,;>
+<keyword  ,unsigned>
+<keyword  ,long>
+<string   ,used>
+<boundary ,;>
+<boundary ,}>
+<boundary ,;>
+<keyword  ,struct>
+<string   ,intset>
+<boundary ,{>
+<boundary ,}>
+<boundary ,;>

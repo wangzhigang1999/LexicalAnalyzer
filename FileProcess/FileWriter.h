@@ -6,6 +6,9 @@
 #define LEXICALANALYZER_FILEWRITER_H
 #include <string>
 #include <vector>
+#include <fstream>
+#include<iostream>
+
 #include "../Pair/Pair.h"
 
 class FileWriter {

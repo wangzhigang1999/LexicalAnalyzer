@@ -15,22 +15,24 @@ std::vector<Pair> LexicalAnalyzer::analyzer() {
     std::vector<Pair> res;
 
 
-    scanner(text, res);
+    analyze(text, res);
 
 
     return res;
 }
 
 
-int LexicalAnalyzer::scanner(std::vector<char> str, std::vector<Pair> &res) {
+int LexicalAnalyzer::analyze(std::vector<char> str, std::vector<Pair> &res) {
 
     int chIndex = 0;
 
-    // 遍历各字符
-    while (chIndex < (str).size()) {
 
-        while (str[chIndex] == ' ' || str[chIndex] == '\n' || str[chIndex] == '\t' || str[chIndex] == '\v' ||
-               str[chIndex] == '\r') {
+    // 遍历各字符
+    while (chIndex < str.size()) {
+
+        // 跳过一些无意义的东西,空格回车之类的
+        while (str[chIndex] == ' ' || str[chIndex] == '\n' || str[chIndex] == '\t'
+               || str[chIndex] == '\v' || str[chIndex] == '\r') {
             if (chIndex < str.size()) {
                 chIndex++;
             }
@@ -38,79 +40,99 @@ int LexicalAnalyzer::scanner(std::vector<char> str, std::vector<Pair> &res) {
 
         // 以字母开头, 可能是标识符, 也可能是保留字
         if (isalpha(str[chIndex])) {
-            std::string tmp;
-            tmp.push_back(str[chIndex++]);
 
-            while (isdigit(str[chIndex]) || isalpha(str[chIndex])) {
-                tmp.push_back(str[chIndex++]);
+            std::string cur;
+
+            cur.push_back(str[chIndex++]);
+
+            while (isdigit(str[chIndex]) || isalpha(str[chIndex])|| str[chIndex] == '.') {
+                cur.push_back(str[chIndex++]);
             }
-            // cout << "得到: " << tmp << endl;
+
             bool isReserve = false;
             // 判断是否是保留字
-            for (int i = 0; i < 34; i++) {
-                if (tmp == reserveWordTbl[i]) {
-
-                    Pair pair = Pair(1, tmp);
-
-                    res.push_back(pair);
-
+            for (auto &i : keywordTable) {
+                if (cur == i) {
+                    res.emplace_back(keyword, cur);
                     isReserve = true;
                     break;
                 }
             }
             if (!isReserve) {
-
-                Pair pair = Pair(2, tmp);
-                res.push_back(pair);
-
+                res.emplace_back(chars, cur);
             }
+
         } else if (isdigit(str[chIndex])) {   // 遇到数字
-            std::string tmp;
+            std::string cur;
+
             while (isdigit(str[chIndex])) {
-                tmp.push_back(str[chIndex++]);
+                cur.push_back(str[chIndex++]);
             }
 
-            Pair pair = Pair(3, (tmp));
-            res.push_back(pair);
+            res.emplace_back(constant, (cur));
 
-            // cout << "数字: " << tmp << endl;
         } else if (str[chIndex] == '<' || str[chIndex] == '>' || str[chIndex] == '=' || str[chIndex] == '+' ||
                    str[chIndex] == '-' || str[chIndex] == '*' || str[chIndex] == '/' || str[chIndex] == '^') {
 
-            std::string tmp;
+            std::string cur;
+            cur.push_back(str[chIndex]);
 
-            if (str[chIndex] == '<' && str[chIndex + 1] == '=') {
-                tmp.push_back(str[chIndex++]);
-            } else if (str[chIndex] == '>' && str[chIndex + 1] == '=') {
-                tmp.push_back(str[chIndex++]);
-            } else {
-                tmp.push_back(str[chIndex++]);
-            }
-            for (int i = 0; i < 10; i++) {
-                if ((tmp == operatorTbl[i])) {
-                    Pair pair = Pair(4, (tmp));
-                    res.push_back(pair);
+            cur.push_back(str[++chIndex]);
 
-                    // cout << "运算符" << table[wordIndex].word << endl;
+
+            bool isOperator = false;
+
+            for (auto &i : operatorTable) {
+                if ((cur == i)) {
+                    res.emplace_back(operators, (cur));
+                    isOperator = true;
                     break;
                 }
             }
+            if (!isOperator) {
+                chIndex--;
+                cur.pop_back();
+                res.emplace_back(operators, (cur));
+            }
+            chIndex++;
+
         } else if (str[chIndex] == '#' || str[chIndex] == '(' || str[chIndex] == ')' || str[chIndex] == '{' ||
                    str[chIndex] == '}' || str[chIndex] == '[' || str[chIndex] == ']' || str[chIndex] == ',' ||
                    str[chIndex] == ';' || str[chIndex] == '"' || str[chIndex] == '\'') {
 
-            std::string tmp;
-            tmp.push_back(str[chIndex++]);
+            std::string cur;
+            cur.push_back(str[chIndex]);
 
-            // cout << "得到界符: " << tmp << endl;
-            for (int i = 0; i < 11; i++) {
-                if ((tmp == delimiterTbl[i])) {
-                    Pair pair = Pair(5, (tmp));
-                    res.push_back(pair);
-                    // cout << "界符: " << table[wordIndex].word << endl;
-                    break;
+            res.emplace_back(boundary, cur);
+
+            // 当第一次遇到一个界符的时候,如果这个界符是一个单引号或者双引号,从这个符号开始直到下一个匹配的引号之间的内容都是一个字符串里的东西
+
+            std::string string;
+            if (str[chIndex] == '\'') {
+                while (str[++chIndex] != '\'') {
+                    string.push_back(string[chIndex]);
                 }
+                res.emplace_back(2, string);
+
+                std::string delimiter;
+                delimiter.push_back(str[chIndex]);
+                res.emplace_back(5, delimiter);
+
+
+            } else if (str[chIndex] == '\"') {
+                while (str[++chIndex] != '\"') {
+                    string.push_back(str[chIndex]);
+                }
+                res.emplace_back(2, string);
+
+                std::string delimiter;
+                delimiter.push_back(str[chIndex]);
+                res.emplace_back(5, delimiter);
+
             }
+
+            chIndex++;
+
         } else {
             chIndex++;
         }

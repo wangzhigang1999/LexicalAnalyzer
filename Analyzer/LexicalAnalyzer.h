@@ -7,39 +7,39 @@
 
 #include <string>
 #include <vector>
-
 #include <utility>
 #include <iostream>
 
 #include "../Pair/Pair.h"
 
 
-//全局变量, 保留字表
-static char reserveWordTbl[34][20] = {
-        "auto", "break", "case", "char", "const", "continue",
+//关键字 2
+static std::string keywordTable[] = {
+        "break", "case", "char", "const", "continue",
         "default", "do", "double", "else", "enum", "extern",
         "float", "for", "goto", "if", "int", "long",
-        "register", "return", "short", "signed", "sizeof", "static",
+        "return", "short", "signed", "sizeof", "static",
         "struct", "switch", "typedef", "union", "unsigned", "void",
-        "volatile", "while", "printf", "define"
+        "while", "define"
 };
 
-// 界符
-static char delimiterTbl[12][3]={
+// 常数3
+
+//operator表, 4
+static std::string operatorTable[] = {
+        "<", "<=", ">", ">=", "=", "+", "-", "*", "/", "^", "++", "+=", "-=", "==", "^=", "|=", "&="
+};
+
+// 界符  5
+static std::string delimiterTable[] = {
         "#", "(", ")", "{", "}", ";",
-        "[", "]", ",", ";", '"', '\''
+        "[", "]", ",", ";", "\"", "'"
 };
 
-//运算符表, 根据需要可以自行增加
-static char operatorTbl[10][4]={
-        "<", "<=", ">", ">=", "=", "+", "-", "*", "/", "^"
-};
 
 class LexicalAnalyzer {
 
     std::vector<char> text;
-
-    int pointer = 0;
 
 public:
     explicit LexicalAnalyzer(std::vector<char> text);
@@ -47,7 +47,7 @@ public:
     std::vector<Pair> analyzer();
 
 
-    int scanner(std::vector<char> str, std::vector<Pair> &res);
+    static int analyze(std::vector<char> str, std::vector<Pair> &res);
 };
 
 

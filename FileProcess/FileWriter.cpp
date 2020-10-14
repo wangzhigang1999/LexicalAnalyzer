@@ -2,8 +2,6 @@
 // Created by wangz on 2020/9/30.
 //
 
-#include <fstream>
-#include <iostream>
 #include "FileWriter.h"
 
 FileWriter::FileWriter(const std::string &fileName) : fileName(fileName) {
