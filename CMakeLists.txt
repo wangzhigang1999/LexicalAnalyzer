@@ -13,4 +13,4 @@ add_executable(LexicalAnalyzer
         FileProcess/FileWriter.h
         Pair/Pair.cpp
         Pair/Pair.h
-        input.cpp)
+        )

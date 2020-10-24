@@ -20,7 +20,7 @@ static std::string keywordTable[] = {
         "float", "for", "goto", "if", "int", "long",
         "return", "short", "signed", "sizeof", "static",
         "struct", "switch", "typedef", "union", "unsigned", "void",
-        "while", "define"
+        "while", "define" , "include"
 };
 
 // 常数3

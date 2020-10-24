@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cert-err58-cpp"
 #include <map>
 #include "FileProcess/FileReader.h"
 #include "Pair/Pair.h"
@@ -8,8 +10,6 @@
 #define  output "C:\\Users\\wangz\\CLionProjects\\LexicalAnalyzer\\out.txt"
 
 
-// todo 检查词法错误,并且报告位置
-// todo 恢复错误
 
 
 int line_cn = 0;
@@ -25,6 +25,7 @@ void count(const std::vector<Pair> &vector);
 void other(const std::vector<Pair> &res);
 
 int main() {
+
 
     // 读取文件
     auto fileReader = FileReader(input);
@@ -98,3 +99,4 @@ void countLineAndChar(const std::string &filename) {
         infile.close();
     }
 }
+

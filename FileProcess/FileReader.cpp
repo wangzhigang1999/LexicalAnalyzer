@@ -25,7 +25,7 @@ std::vector<char> FileReader::read() {
 
 
 /**
- * 处理注释的函数, 处理单行注释以及
+ * 处理注释的函数, 处理单行注释以及多行注释
  * @param file
  * @param res
  */

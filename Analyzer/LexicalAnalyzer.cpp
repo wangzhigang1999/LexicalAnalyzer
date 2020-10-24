@@ -21,6 +21,52 @@ std::vector<Pair> LexicalAnalyzer::analyzer() {
     return res;
 }
 
+bool isNumber(const char *s) {
+    bool bIsNum = false;
+    // 去除空格
+    while (' ' == *s) {
+        s++;
+    }
+    // 允许出现一个符号
+    if ('-' == *s || '+' == *s) {
+        s++;
+    }
+    // 整数部分
+    while (isdigit(*s)) {
+        bIsNum = true;
+        s++;
+    }
+    // 允许出现一个小数点
+    if ('.' == *s) {
+        s++;
+    }
+    // 小数部分
+    while (isdigit(*s)) {
+        bIsNum = true;
+        s++;
+    }
+    // 允许出现科学计数法，其前必须为数字
+    if (bIsNum && 'e' == *s) {
+        s++;
+        bIsNum = false;
+        // 幂次方允许出现一个符号
+        if ('+' == *s || '-' == *s) {
+            s++;
+        }
+        // 幂次方部分
+        while (isdigit(*s)) {
+            s++;
+            bIsNum = true;
+        }
+    }
+
+    while (' ' == *s) {
+        s++;
+    }
+
+    return '\0' == *s && bIsNum;
+}
+
 
 int LexicalAnalyzer::analyze(std::vector<char> str, std::vector<Pair> &res) {
 
@@ -45,13 +91,16 @@ int LexicalAnalyzer::analyze(std::vector<char> str, std::vector<Pair> &res) {
 
             cur.push_back(str[chIndex++]);
 
-            while (isdigit(str[chIndex]) || isalpha(str[chIndex])|| str[chIndex] == '.') {
+            while (isdigit(str[chIndex]) || isalpha(str[chIndex]) || str[chIndex] == '.') {
                 cur.push_back(str[chIndex++]);
             }
 
             bool isReserve = false;
+
+
             // 判断是否是保留字
             for (auto &i : keywordTable) {
+
                 if (cur == i) {
                     res.emplace_back(keyword, cur);
                     isReserve = true;
@@ -65,11 +114,18 @@ int LexicalAnalyzer::analyze(std::vector<char> str, std::vector<Pair> &res) {
         } else if (isdigit(str[chIndex])) {   // 遇到数字
             std::string cur;
 
-            while (isdigit(str[chIndex])) {
+            // 这里加入错误检查
+            while ((str[chIndex] != ' ' && str[chIndex] != '\n')) {
                 cur.push_back(str[chIndex++]);
             }
 
-            res.emplace_back(constant, (cur));
+            if (isNumber(cur.c_str())) {
+                res.emplace_back(constant, (cur));
+            } else {
+                std::cout << "Error parsing number: " << cur;
+                exit(-1);
+            }
+
 
         } else if (str[chIndex] == '<' || str[chIndex] == '>' || str[chIndex] == '=' || str[chIndex] == '+' ||
                    str[chIndex] == '-' || str[chIndex] == '*' || str[chIndex] == '/' || str[chIndex] == '^') {
@@ -112,7 +168,7 @@ int LexicalAnalyzer::analyze(std::vector<char> str, std::vector<Pair> &res) {
                 while (str[++chIndex] != '\'') {
                     string.push_back(string[chIndex]);
                 }
-                res.emplace_back(2, string);
+                res.emplace_back(chars, string);
 
                 std::string delimiter;
                 delimiter.push_back(str[chIndex]);
@@ -123,7 +179,7 @@ int LexicalAnalyzer::analyze(std::vector<char> str, std::vector<Pair> &res) {
                 while (str[++chIndex] != '\"') {
                     string.push_back(str[chIndex]);
                 }
-                res.emplace_back(2, string);
+                res.emplace_back(chars, string);
 
                 std::string delimiter;
                 delimiter.push_back(str[chIndex]);
@@ -139,6 +195,8 @@ int LexicalAnalyzer::analyze(std::vector<char> str, std::vector<Pair> &res) {
     }
     return 0;
 }
+
+
 
 
 
